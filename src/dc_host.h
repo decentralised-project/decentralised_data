@@ -3,24 +3,24 @@
 
 #include <QObject>
 #include <QDataStream>
+#include <QMetaProperty>
 
-class dc_host : public QObject
+class dc_host
 {
-    Q_OBJECT
 public:
-    explicit dc_host(QObject *parent = 0, QString ip = "", int port = 0);
+    explicit dc_host(QString ip = "", int port = 0);
 
-    QString ipAddress() const;
-    void setIpAddress(const QString &ip);
+    QString ipAddress() const { return _ipAddress; }
+    void setIpAddress(const QString &ip) { _ipAddress = ip; }
 
-    int port() const;
-    void setPort(int p);
+    int port() const { return _port; }
+    void setPort(int p) { _port = p; }
 
+    friend QDataStream & operator << ( QDataStream &ds, dc_host &obj );
+    friend QDataStream & operator >> ( QDataStream &ds, dc_host &obj );
 private:
     QString _ipAddress;
     int _port;
 };
-QDataStream &operator<<(QDataStream &out, const dc_host &host);
-QDataStream &operator>>(QDataStream &in, dc_host &host);
 
 #endif // DC_HOST_H

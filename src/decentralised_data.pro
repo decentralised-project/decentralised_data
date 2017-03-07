@@ -27,7 +27,8 @@ SOURCES += decentralised_data.cpp \
     dc_host.cpp
 
 HEADERS += decentralised_data.h \
-    dc_host.h
+    dc_host.h \
+    dc_data_error.h
 unix {
     target.path = /usr/lib
     INSTALLS += target
