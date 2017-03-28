@@ -13,9 +13,9 @@ class decentralised_data: public QObject
 {
     Q_OBJECT
     public:
-        explicit decentralised_data(QObject *parent, QString &dataDirPath);
+        explicit decentralised_data(QObject *parent = 0);
 
-        void initialize();
+        void initialize(QString dataDirPath);
         QList<dc_host> getHosts();
 
     signals:

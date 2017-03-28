@@ -1,13 +1,13 @@
 #include "decentralised_data.h"
 
 
-decentralised_data::decentralised_data(QObject *parent, QString &dataDirPath) : QObject(parent)
+decentralised_data::decentralised_data(QObject *parent) : QObject(parent)
 {
-    _dataDirectory = dataDirPath;
 }
 
-void decentralised_data::initialize()
+void decentralised_data::initialize(QString dataDirPath)
 {
+    _dataDirectory = dataDirPath;
     QDir dataDir(_dataDirectory);
 
     if(!dataDir.exists(_dataDirectory))
