@@ -1,9 +1,7 @@
 #include "dc_host.h"
 
-dc_host::dc_host(QString ip, int port)
+dc_host::dc_host()
 {
-    _ipAddress = ip;
-    _port = port;
 }
 
 QDataStream & operator >> ( QDataStream &ds, dc_host &obj)

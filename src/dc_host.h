@@ -8,7 +8,7 @@
 class dc_host
 {
 public:
-    explicit dc_host(QString ip = "", int port = 0);
+    dc_host();
 
     QString ipAddress() const { return _ipAddress; }
     void setIpAddress(const QString &ip) { _ipAddress = ip; }
