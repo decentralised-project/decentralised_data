@@ -12,9 +12,25 @@ dc_user::dc_user(EC_KEY* keyPair, QString userName)
     _userName = userName;
 }
 
-void dc_user::save(QString dataDir)
+bool dc_user::save(QString dataDir, QString pw)
 {
+    QDir usersDir(dataDir + "users");
+    if(!usersDir.exists())
+        QDir.mkdir(dataDir + "users");
 
+    QString filename = _userName.replace(" ", "-");
+    QFile userFile(dataDir + "users/" + filename + ".usr");
+    if(userFile.exists())
+        return false;
+
+    if(userFile.open(QIODevice::WriteOnly)) {
+        QDataStream out(&userFile);
+        out.setVersion(QDataStream::Qt_5_1);
+
+        out << this;
+
+        userFile.close();
+    }
 }
 
 QDataStream & operator >> ( QDataStream &ds, dc_user &obj)
@@ -24,5 +40,34 @@ QDataStream & operator >> ( QDataStream &ds, dc_user &obj)
 
 QDataStream & operator << ( QDataStream &ds, dc_user &obj)
 {
-    return ds << obj._userName;
+    BIO* memBioKeyPair = BIO_new(BIO_s_mem());
+    if(memBioKeyPair == NULL)
+        return false;
+
+    EC_GROUP *group = EC_GROUP_new_by_curve_name(NID_secp256k1);
+    if(group == NULL)
+        return false;
+
+    int iRet = PEM_write_bio_ECPKParameters(memBioKeyPair, group);
+    if (!iRet)
+        return false;
+
+    iRet = PEM_write_bio_ECPrivateKey(memBioKeyPair, obj._keyPair, NULL, NULL, 0, NULL, pw.toStdString().c_str());
+    if (!iRet)
+        return false;
+
+    iRet = PEM_write_bio_EC_PUBKEY(memBioKeyPair, obj._keyPair);
+    if (!iRet)
+        return false;
+
+    char* pchPriKey = NULL;
+    pchPriKey = new char[4096];
+    iRet = BIO_read(memBioKeyPair, pchPriKey, 4096);
+    if(!iRet)
+        return false;
+
+    BIO_free_all(memBioKeyPair);
+    EC_GROUP_free(group);
+
+    return ds << opchPriKey;
 }

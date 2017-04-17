@@ -2,7 +2,10 @@
 #define DC_USER_H
 
 #include <QObject>
+#include <QDir>
 #include <openssl/ec.h>
+#include <openssl/ecdsa.h>
+#include <openssl/pem.h>
 
 class dc_user
 {
@@ -10,7 +13,7 @@ public:
     dc_user();
     dc_user(EC_KEY* keyPair, QString userName);
 
-    void save(QString dataDir);
+    bool save(QString dataDir);
 
     friend QDataStream & operator << ( QDataStream &ds, dc_user &obj );
     friend QDataStream & operator >> ( QDataStream &ds, dc_user &obj );
