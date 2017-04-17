@@ -13,10 +13,7 @@ public:
     dc_user();
     dc_user(EC_KEY* keyPair, QString userName);
 
-    bool save(QString dataDir);
-
-    friend QDataStream & operator << ( QDataStream &ds, dc_user &obj );
-    friend QDataStream & operator >> ( QDataStream &ds, dc_user &obj );
+    bool save(QString dataDir, QString pw);
 
 private:
     EC_KEY *_keyPair;
