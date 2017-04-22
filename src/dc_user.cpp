@@ -19,7 +19,7 @@ bool dc_user::save(QString dataDir, QString pw)
         usersDir.mkdir(dataDir + "users");
 
     QString filename = _userName.replace(" ", "-");
-    QFile userFile(dataDir + "users/" + filename + ".usr");
+    QFile userFile(dataDir + "users/" + filename + ".pem");
     if(userFile.exists())
         return false;
 
@@ -51,7 +51,7 @@ bool dc_user::save(QString dataDir, QString pw)
 
     if(userFile.open(QIODevice::WriteOnly)) {
 
-        userFile.write(pchPriKey);
+        userFile.write(pchPriKey, iRet);
 
         userFile.close();
     }
